@@ -1,0 +1,13 @@
+Send Codes:
+a (a.k.a 97) - 'ping', expect 0x3 in return for 'pong'.
+b (98) - 'open shutter'
+c (99) - 'close shutter'
+d (100) - 'shutter status'
+e (101) - 'reset from error'
+
+Recieve Codes:
+0x3 - Pong
+0x4 - Shutter Open
+0x5 - Shutter Closed
+0x6 - Shutter Error
+0x7 - Movement Completed.

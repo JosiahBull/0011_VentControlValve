@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Vent Control</title>
+    <meta name="author" content="Josiah Bull">
+    <meta name="description" content="Vent Control Demonstration Front End Website">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="index.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    </head>
+    <body>
+    
+    <div class="container h-100">
+        <div class="row h-100 align-items-center" >
+            <div class="col-sm text-center">
+                <input type="button" value="Open Vent" class="openVent" onclick="openVent();">
+            </div>
+            <div class="col-sm text-center">
+                <input type="button" value="Close Vent" class="closeVent" onclick="closeVent();">
+            </div>
+            <div class="col-sm text-center">
+                <input type="button" value="Reset Vent" class="resetVent" onclick="resetVent();">
+            </div>
+        </div>
+    </div>
+    
+    
+
+
+
+
+
+    <script type="text/javascript">
+    function openVent() {
+        console.log('openVent');
+        $.post("http://192.168.0.168:3000/openVent/", {command: "open"}, function(data){
+            console.log(`Successful request: ${data}`);
+        });
+    }
+    function closeVent() {
+        console.log('closeVent');
+        $.post("http://192.168.0.168:3000/openVent/", {command: "close"}, function(data){
+            console.log(`Successful request: ${data}`);
+        });
+    }
+
+    function resetVent() {
+        console.log('resetVent');
+        $.post("http://192.168.0.168:3000/openVent/", {command: "resetError"}, function(data){
+            console.log(`Successful request: ${data}`);
+        }); 
+    }
+
+    function autorun()
+    {
+     
+
+
+    }
+    if (document.addEventListener) document.addEventListener("DOMContentLoaded", autorun, false);
+    else if (document.attachEvent) document.attachEvent("onreadystatechange", autorun);
+    else window.onload = autorun;
+    </script>
+    </body>
+</html>
