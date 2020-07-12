@@ -51,11 +51,19 @@
             console.log(`Successful request: ${data}`);
         }); 
     }
-
+    let autoOpen = false;
     function autorun()
     {
-     
-
+        let open = true;
+        setInterval(() => {
+            if (!autoOpen) return;
+            if (open) {
+                closeVent();
+            } else {
+                openVent();
+            }
+            open = !open;
+        }, 11000);
 
     }
     if (document.addEventListener) document.addEventListener("DOMContentLoaded", autorun, false);
