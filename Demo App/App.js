@@ -56,29 +56,28 @@ class Dashboard extends Component {
 				connected: false
 			}})
 		}
-		this.intervalID = setTimeout(this.getStatus.bind(this), 15000);
+		this.intervalID = setTimeout(this.getStatus.bind(this), 5000);
 	}
 	openVent = async () => {
-		if (!this.state.data.connected) {
-			Alert.alert("Oops, didn't run bc not connected.");
-			return;
-		} //If not connected to vent then don't attempt to run.
+		if (!this.state.data.connected) return; //If not connected to vent then don't attempt to run.
+		this.state.data.shutterOpen = true;
 		const requestOptions = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ title: '' })
+			body: JSON.stringify({ title: 'Beep' })
 		};
-		const response = await fetch('http://192.168.0.130/close', requestOptions);
+		const response = await fetch('http://192.168.0.130/open', requestOptions);
 		const data = await response.json();
 	};
 	closeVent = async () => {
 		if (!this.state.data.connected) return; //If not connected to vent then don't attempt to run.
+		this.state.data.shutterOpen = false;
 		const requestOptions = {
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({title: ''})
+			body: JSON.stringify({title: 'Beep'})
 		};
-		const response = await fetch('http://192.168.0.130/open', requestOptions);
+		const response = await fetch('http://192.168.0.130/close', requestOptions);
 		const data = await response.json();
 	}
 	resetVent = async () => {
@@ -91,49 +90,55 @@ class Dashboard extends Component {
 		const response = await fetch('http://192.168.0.130/reset', requestOptions);
 		const data = await response.json();
 	}
+	currentStatus = () => {
+		return <Text style={styles.title}>The vent is currently {(this.state.data.shutterOpen) ? 'open' : 'closed'}.</Text>
+	}
 	errorDisplay = () => {
 		if (this.state.data.errorStatus) {
-			return <Text>The vent is currently suffering from an error!</Text>;
+			<Separator />
+			return <Text style={styles.title}>The vent is currently suffering from an error!</Text>;
 		}
 		return null;
 	}
 	connectedDisplay = () => {
 		if (!this.state.data.connected) {
-			return <Text>Unable to connect to vent, check your connection.</Text>;
+			<Separator />
+			return <Text style={styles.title}>Unable to connect to vent, check your connection.</Text>;
 		}
 		return null;
 	}
 	render() {
 		return (
 			<SafeAreaView style={styles.container}>
-
-			<Separator />
-			<View>
-				<Text style={styles.title}>Select an action for the vent to perform.</Text>
-				<View style={styles.fixToText}>
-				{/* <TouchableOpacity disabled={this.state.data.connected}> */}
-					<Button
-						title="Open Vent"
-						onPress={() => this.openVent}
-				/>
-				{/* </TouchableOpacity> */}
-				{/* <TouchableOpacity disabled={this.state.data.errorStatus && this.state.data.connected}> */}
-					<Button
-						title="Reset Vent"
-						onPress={() => this.resetVent}
-					/>
-				{/* </TouchableOpacity> */}
-
-				{/* <TouchableOpacity disabled={this.state.data.connected}> */}
-					<Button
-						title="Close Vent"
-						onPress={() => this.closeVent}
-					/>
-				{/* </TouchableOpacity> */}
+				<View>
+					<this.currentStatus />
 				</View>
-				<this.errorDisplay />
-				<this.connectedDisplay />
-			</View>
+				<Separator />
+				<View>
+					<Text style={styles.title}>Select an action for the vent to perform.</Text>
+					<View style={styles.fixToText}>
+					<TouchableOpacity disabled={this.state.data.connected}>
+						<Button
+							title="Open Vent"
+							onPress={this.openVent}
+					/>
+					</TouchableOpacity>
+					<TouchableOpacity disabled={this.state.data.errorStatus && this.state.data.connected}>
+						<Button
+							title="Reset Vent"
+							onPress={this.resetVent}
+						/>
+					</TouchableOpacity>
+					<TouchableOpacity disabled={this.state.data.connected}>
+						<Button
+							title="Close Vent"
+							onPress={this.closeVent}
+						/>
+					</TouchableOpacity>
+					</View>
+					<this.errorDisplay />
+					<this.connectedDisplay />
+				</View>
 			</SafeAreaView>
 		);
 	}
